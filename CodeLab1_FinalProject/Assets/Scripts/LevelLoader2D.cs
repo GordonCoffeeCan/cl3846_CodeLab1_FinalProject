@@ -2,75 +2,63 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-using UnityEngine.SceneManagement;
 
 public class LevelLoader2D : MonoBehaviour {
 
-    private float offSetX = 12;
-    private float offSetY = 4;
+    private string _filePath;
+    private string _fileName = "Level01.txt";
+    private GameObject _levelHolder;
+    private StreamReader _streamReader;
+    private string _docLine;
+    private int _posY;
+    private float _posScale;
 
-    public string[] fileNames;
-    public static int levelNum;
+    private float _offSetX;
+    private float _offSetY;
 
-    public static bool isLevelSet = false;
-
-    public static GameObject _levelHolder;
-
-    private List<GameObject> _levelObjects;
-
-    // Use this for initialization
-    void Start () {
+	// Use this for initialization
+	void Start () {
         _levelHolder = new GameObject("Level Holder");
-
-        _levelObjects = new List<GameObject>();
-        SettLevel();
+        _filePath = Application.dataPath + "/" + _fileName;
+        _streamReader = new StreamReader(_filePath);
+        SetLevel();
     }
 	
 	// Update is called once per frame
 	void Update () {
-        /*if (Input.GetKeyDown(KeyCode.P)) {
-            //levelNum++;
-            SceneManager.LoadScene("Main");
-        }*/
+		
 	}
 
-    private void SettLevel() {
-        
-        levelNum = 0;
-        
+    private void SetLevel() {
+        int _lineNumber = 0;
+        while (!_streamReader.EndOfStream) {
+            
+            _docLine = _streamReader.ReadLine();
 
-        for (int i = 0; i < 1; i++) {
-            string fileName = fileNames[levelNum];
-            string filePath = Application.dataPath + "/" + fileName;
-            StreamReader sr = new StreamReader(filePath);
-            int yPos = 0;
-            while (!sr.EndOfStream) {
-                string line = sr.ReadLine();
-
-                for (int xPos = 0; xPos < line.Length; xPos++) {
-                    if (line[xPos] == 'x') {
-                        GameObject _platform = Instantiate(Resources.Load("Prefabs/TestBox") as GameObject);
-                        _levelObjects.Add(_platform);
-                        Vector2 _platformSize = new Vector2(_platform.GetComponent<SpriteRenderer>().bounds.size.x, _platform.GetComponent<SpriteRenderer>().bounds.size.y);
-                        _platform.transform.position = new Vector2(xPos * _platformSize.x - offSetX * _platformSize.x, yPos * _platformSize.y - offSetY * _platformSize.y);
-                        //offSetX += _platformSize.x;
-                        //offSetY += _platformSize.y;
-                        _platform.transform.SetParent(_levelHolder.transform);
-                    } else if (line[xPos] == 't' && i == 0) {
-                        //GameObject _target = Instantiate(Resources.Load("Prefabs/Target") as GameObject);
-                        //Rigidbody _targetRig = _target.GetComponent<Rigidbody>();
-                        
-                        //_target.transform.position = new Vector3(xPos + offSetX, 0.5f, yPos + offSetY);
-                    }
+            for (int _posX = 0; _posX < _docLine.Length; _posX++) {
+                if (_docLine[_posX] == 'x') {
+                    SetObject("TestBox", _posX);
+                } else if(_docLine[_posX] == 'c') {
+                    SetObject("StoneCollum", _posX);
                 }
-                yPos--;
 
+                if (_lineNumber == 0) {
+                    _offSetX += _posScale;
+                }
             }
-            sr.Close();
+            _offSetY += _posScale;
+            _posY--;
+            _lineNumber++;
         }
+        _streamReader.Close();
 
-        /*for (int i = 0; i < _levelObjects.Count; i++) {
-            _levelObjects[i].transform.position -= new Vector3(offSetX, offSetY, 0);
-        }*/
+        _levelHolder.transform.position = new Vector3(-_offSetX / 2 + _posScale / 2, _offSetY / 2 - _posScale / 2, 0);
+    }
+
+    private void SetObject(string _name, int _posX) {
+        GameObject _gameObject = Instantiate(Resources.Load("Prefabs/" + _name)) as GameObject;
+        _posScale = _gameObject.GetComponent<SpriteRenderer>().bounds.size.x;
+        _gameObject.transform.parent = _levelHolder.transform;
+        _gameObject.transform.position = new Vector3(_posX * _posScale, _posY * _posScale, 0);
     }
 }
