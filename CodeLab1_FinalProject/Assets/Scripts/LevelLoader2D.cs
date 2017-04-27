@@ -36,10 +36,16 @@ public class LevelLoader2D : MonoBehaviour {
             _docLine = _streamReader.ReadLine();
 
             for (int _posX = 0; _posX < _docLine.Length; _posX++) {
-                if (_docLine[_posX] == 'x') {
-                    SetObject("TestBox", _posX);
-                } else if(_docLine[_posX] == 'c') {
-                    SetObject("StoneCollum", _posX);
+                switch (_docLine[_posX]) {
+                    case 'x':
+                        SetObject("TestBox", _posX);
+                        break;
+                    case 'c':
+                        SetObject("StoneCollum", _posX);
+                        break;
+                    case 'p':
+                        SetObject("Human", _posX);
+                        break;
                 }
 
                 if (_lineNumber == 0) {
