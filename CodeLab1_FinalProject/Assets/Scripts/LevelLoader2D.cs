@@ -16,8 +16,8 @@ public class LevelLoader2D : MonoBehaviour {
     public static GameObject playerHuman;
     public static GameObject playerZombie;
 
-    private float _offSetX;
-    private float _offSetY;
+    public static float _offSetX;
+    public static float _offSetY;
 
 	// Use this for initialization
 	void Start () {

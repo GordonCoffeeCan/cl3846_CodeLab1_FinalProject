@@ -1,16 +1,17 @@
 fileFormatVersion: 2
 guid: 3f986da6deb9dc7479eccd4870f6eeaf
-timeCreated: 1493345858
+timeCreated: 1493375056
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
     21300000: Human_leftArm
-    21300002: HumanParts_spritesheet_1
+    21300002: Human_leftLeg
     21300004: Human_leftLeg
     21300006: Human_body
     21300008: Human_head
     21300010: Human_rightArm
     21300012: Human_rightLeg
+    21300014: Human_inWalk
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -136,12 +137,12 @@ TextureImporter:
       name: Human_leftArm
       rect:
         serializedVersion: 2
-        x: 0
+        x: 2
         y: 104
-        width: 29
-        height: 24
+        width: 28
+        height: 22
       alignment: 9
-      pivot: {x: 0.1988639, y: 0.79703873}
+      pivot: {x: 0.18041469, y: 0.8288574}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -149,38 +150,12 @@ TextureImporter:
       name: Human_leftLeg
       rect:
         serializedVersion: 2
-        x: 39
-        y: 95
+        x: 2
+        y: 52
         width: 17
-        height: 33
+        height: 32
       alignment: 9
-      pivot: {x: 0.31129298, y: 0.8078403}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: Human_body
-      rect:
-        serializedVersion: 2
-        x: 65
-        y: 87
-        width: 32
-        height: 41
-      alignment: 9
-      pivot: {x: 0.49999976, y: 0.16528785}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: Human_head
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 28
-        width: 48
-        height: 50
-      alignment: 9
-      pivot: {x: 0.5445557, y: 0.082957305}
+      pivot: {x: 0.36560586, y: 0.80938554}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -188,12 +163,25 @@ TextureImporter:
       name: Human_rightArm
       rect:
         serializedVersion: 2
-        x: 58
-        y: 53
-        width: 25
-        height: 26
+        x: 40
+        y: 101
+        width: 24
+        height: 25
       alignment: 9
-      pivot: {x: 0.8279306, y: 0.794754}
+      pivot: {x: 0.86491615, y: 0.8122415}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Human_inWalk
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 94
+        width: 18
+        height: 32
+      alignment: 9
+      pivot: {x: 0.43653616, y: 0.8510337}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -201,12 +189,38 @@ TextureImporter:
       name: Human_rightLeg
       rect:
         serializedVersion: 2
-        x: 92
-        y: 46
-        width: 17
-        height: 33
+        x: 102
+        y: 94
+        width: 18
+        height: 32
       alignment: 9
-      pivot: {x: 0.58386946, y: 0.813241}
+      pivot: {x: 0.56346387, y: 0.8153353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Human_body
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 45
+        width: 31
+        height: 39
+      alignment: 9
+      pivot: {x: 0.4938581, y: 0.13386291}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Human_head
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 34
+        width: 47
+        height: 50
+      alignment: 9
+      pivot: {x: 0.54455954, y: 0.09637062}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
