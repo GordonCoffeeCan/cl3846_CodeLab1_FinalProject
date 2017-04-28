@@ -64,6 +64,11 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
+
+        //Get a raycast2D to detect is on the Ground or not;
+        //0.6f is amount of offset on Y axis to avoid the ray collide with Character itself;
+        //0.01f is the amount of distence for the ray. Character in the middle air, the ray will not collide with the Ground;
+        //Give the _isGround value with both true or false to detect whether the character is on the ground or not. And will able to jump or not.
         RaycastHit2D _groudnHit = Physics2D.Raycast(new Vector2(this.transform.position.x, this.transform.position.y - 0.6f), -Vector2.up, 0.01f);
         if (_groudnHit.collider != null) {
             if (_groudnHit.collider.gameObject.tag == "Ground") {
@@ -72,17 +77,7 @@ public class PlayerController : MonoBehaviour {
         } else if(_groudnHit.collider == null) {
             _isGround = false;
         }
-    }
 
-    /*private void OnCollisionStay2D(Collision2D _col) {
-        if (_col.gameObject.tag == "Ground") {
-            _isGround = true;
-        }
+        //Get a raycast2D to detect is on the Ground or not
     }
-
-    private void OnCollisionExit2D(Collision2D _col) {
-        if (_col.gameObject.tag == "Ground") {
-            _isGround = false;
-        }
-    }*/
 }
