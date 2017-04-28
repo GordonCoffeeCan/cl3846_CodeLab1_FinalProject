@@ -49,6 +49,9 @@ public class LevelLoader2D : MonoBehaviour {
                     case 'p':
                         SetObject("Human", _posX);
                         break;
+                    case 'z':
+                        SetObject("Zombie", _posX);
+                        break;
                 }
 
                 if (_lineNumber == 0) {

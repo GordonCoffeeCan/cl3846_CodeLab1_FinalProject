@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
-    private float speed = 1f;
-    private float jumpSpeed = 3;
+    public float speed = 8;
+    public float jumpSpeed = 5;
 
     private Rigidbody2D _rig;
     private Animator _anim;
@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour {
             }
 
             if (Input.GetButtonDown(_ctrJump)) {
-                _rig.AddForce(new Vector2(0, jumpSpeed * Time.deltaTime * 100), ForceMode2D.Impulse);
+                _rig.AddForce(new Vector2(0, jumpSpeed), ForceMode2D.Impulse);
             }
 
             _fallingLayerWeight = 0;
@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour {
                 _fallingLayerWeight = 1;
             }
         }
-        _rig.velocity = new Vector2(Input.GetAxis(_ctrMove) * speed * Time.deltaTime * 100, _rig.velocity.y);
+        _rig.velocity = new Vector2(Input.GetAxis(_ctrMove) * speed * Time.deltaTime * 10, _rig.velocity.y);
         _anim.SetLayerWeight(1, _fallingLayerWeight);
     }
 
