@@ -13,6 +13,9 @@ public class LevelLoader2D : MonoBehaviour {
     private int _posY;
     private float _posScale;
 
+    public static GameObject playerHuman;
+    public static GameObject playerZombie;
+
     private float _offSetX;
     private float _offSetY;
 
@@ -59,11 +62,18 @@ public class LevelLoader2D : MonoBehaviour {
         _streamReader.Close();
 
         _levelHolder.transform.position = new Vector3(-_offSetX / 2 + _posScale / 2, _offSetY / 2 - _posScale / 2, 0);
+        playerHuman.transform.parent = null;
+
     }
 
     private void SetObject(string _name, int _posX) {
         GameObject _gameObject = Instantiate(Resources.Load("Prefabs/" + _name)) as GameObject;
         _posScale = _gameObject.GetComponent<SpriteRenderer>().bounds.size.x;
+        if (_name == "Human") {
+            playerHuman = _gameObject;
+        } else if (_name == "Zombie") {
+            playerZombie = _gameObject;
+        }
         _gameObject.transform.parent = _levelHolder.transform;
         _gameObject.transform.position = new Vector3(_posX * _posScale, _posY * _posScale, 0);
     }
