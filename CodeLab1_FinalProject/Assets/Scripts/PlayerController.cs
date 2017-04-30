@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour {
         if (_isGround == true) {
             if (Mathf.Abs(Input.GetAxis(_ctrAim)) > 0.75f) {
                 if (_spriteHolder.localScale.x > 0) {
-                    if (_directionChanged == true) {
+                    /*if (_directionChanged == true) {
                         _reticlePivot.rotation = Quaternion.Euler(new Vector3(0, 0, _reticleCounterAngle));
                         _directionChanged = false;
                     }
@@ -79,9 +79,12 @@ public class PlayerController : MonoBehaviour {
                         }
                         _reticlePivot.Rotate(new Vector3(0, 0, Input.GetAxis(_ctrAim) * Time.deltaTime * 100));
                         _reticleCounterAngle = _reticlePivot.rotation.eulerAngles.z - (_reticlePivot.rotation.eulerAngles.z - 270) * 2;
-                    }
+                    }*/
+
+                    Debug.Log(Mathf.Clamp(_reticlePivot.rotation.eulerAngles.z, 10, 50));
+                    _reticlePivot.Rotate(new Vector3(0, 0, Input.GetAxis(_ctrAim) * Time.deltaTime * 100));
                 } else if(_spriteHolder.localScale.x < 0) {
-                    if (_directionChanged == false) {
+                    /*if (_directionChanged == false) {
                         _reticlePivot.rotation = Quaternion.Euler(new Vector3(0, 0, _reticleCounterAngle));
                         _directionChanged = true;
                     }
@@ -96,7 +99,7 @@ public class PlayerController : MonoBehaviour {
                         }
 
                         _reticlePivot.Rotate(new Vector3(0, 0, -Input.GetAxis(_ctrAim) * Time.deltaTime * 100));
-                    }
+                    }*/
 
                     Debug.Log(_reticlePivot.rotation.eulerAngles.z);
                 }
