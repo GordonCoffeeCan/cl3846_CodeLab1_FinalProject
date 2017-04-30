@@ -66,6 +66,7 @@ public class LevelLoader2D : MonoBehaviour {
 
         _levelHolder.transform.position = new Vector3(-_offSetX / 2 + _posScale / 2, _offSetY / 2 - _posScale / 2, 0);
         playerHuman.transform.parent = null;
+        playerZombie.transform.parent = null;
 
     }
 

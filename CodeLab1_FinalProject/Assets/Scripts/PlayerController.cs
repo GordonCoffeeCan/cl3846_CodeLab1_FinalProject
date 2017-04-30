@@ -6,9 +6,16 @@ public class PlayerController : MonoBehaviour {
 
     public float speed = 8;
     public float jumpSpeed = 5;
+    public float aimSpeed = 30;
+    
 
     private Rigidbody2D _rig;
     private Animator _anim;
+    private Transform _headPivot;
+    private Transform _reticlePivot;
+    private SpriteRenderer _reticle;
+
+    private float _speed;
 
     private string _ctrMove;
     private string _ctrAim;
@@ -20,6 +27,9 @@ public class PlayerController : MonoBehaviour {
     private void Awake() {
         _rig = this.GetComponent<Rigidbody2D>();
         _anim = this.GetComponent<Animator>();
+        _reticlePivot = this.transform.Find("ReticlePivot");
+        _reticle = _reticlePivot.Find("Reticle").GetComponent<SpriteRenderer>();
+        _speed = speed;
     }
 
     // Use this for initialization
@@ -28,39 +38,70 @@ public class PlayerController : MonoBehaviour {
             _ctrMove = "JoyHorizontal";
             _ctrAim = "JoyVertical";
             _ctrJump = "JoyJump";
+            _headPivot = this.transform.Find("Human_body/HeadPivot");
+        } else if (this.tag == "Zombie") {
+            _ctrMove = "ZomHorizontal";
+            _ctrAim = "ZomVertical";
+            _ctrJump = "ZomJump";
+            _headPivot = this.transform.Find("Zombie_body/HeadPivot");
         }
-	}
+
+        _reticle.color = new Color(255, 255, 255, 0);
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
         if (_isGround == true) {
-            if (Input.GetAxis(_ctrMove) > 0) {
-                _anim.SetFloat("Speed", 1);
-            } else if (Input.GetAxis(_ctrMove) < 0) {
-                _anim.SetFloat("Speed", -1);
-            } else {
+            if (Mathf.Abs(Input.GetAxis(_ctrAim))> 0.75f) {
+                /*if (_headPivot.rotation.eulerAngles.z >= 0 && _headPivot.rotation.eulerAngles.z < 90) {
+                    if (_headPivot.rotation.eulerAngles.z > 30) {
+                        _headPivot.rotation = Quaternion.Euler(new Vector3(0, 0, 30));
+                    }
+                } else if (_headPivot.rotation.eulerAngles.z >= 270 && _headPivot.rotation.eulerAngles.z < 360) {
+                    if (_headPivot.rotation.eulerAngles.z < 315) {
+                        _headPivot.rotation = Quaternion.Euler(new Vector3(0, 0, -45));
+                    }
+                }
+                _headPivot.Rotate(new Vector3(0, 0, Input.GetAxis(_ctrAim) * Time.deltaTime * 100));*/
                 _anim.SetFloat("Speed", 0);
+                speed = 0;
+            } else{
+                if (Input.GetAxis(_ctrMove) > 0) {
+                    _anim.SetFloat("Speed", 1);
+                    _anim.SetLayerWeight(1, 0);
+                } else if (Input.GetAxis(_ctrMove) < 0) {
+                    _anim.SetFloat("Speed", 1);
+                    _anim.SetLayerWeight(1, 1);
+                } else {
+                    _anim.SetFloat("Speed", 0);
+                }
+                speed = _speed;
             }
+            
 
             if (Input.GetButtonDown(_ctrJump)) {
                 _rig.AddForce(new Vector2(0, jumpSpeed), ForceMode2D.Impulse);
             }
 
-            _fallingLayerWeight = 0;
+            
         } else {
-            if (Input.GetAxis(_ctrMove) >= 0) {
-                _anim.SetFloat("JumpSpeed", 1);
+            if (Input.GetAxis(_ctrMove) > 0) {
+                _anim.SetFloat("Speed", 1);
+                _anim.SetLayerWeight(1, 0);
+            } else if (Input.GetAxis(_ctrMove) < 0) {
+                _anim.SetFloat("Speed", 1);
+                _anim.SetLayerWeight(1, 1);
             } else {
-                _anim.SetFloat("JumpSpeed", -1);
+                _anim.SetFloat("Speed", 0);
             }
 
             if (_rig.velocity.y > 0.5f || _rig.velocity.y < -0.5f) {
                 _anim.SetFloat("Speed", 0);
-                _fallingLayerWeight = 1;
             }
         }
         _rig.velocity = new Vector2(Input.GetAxis(_ctrMove) * speed * Time.deltaTime * 10, _rig.velocity.y);
-        _anim.SetLayerWeight(1, _fallingLayerWeight);
+        _anim.SetBool("OnGround", _isGround);
     }
 
     private void FixedUpdate() {
@@ -77,7 +118,6 @@ public class PlayerController : MonoBehaviour {
         } else if(_groudnHit.collider == null) {
             _isGround = false;
         }
-
-        //Get a raycast2D to detect is on the Ground or not
+        //Get a raycast2D to detect is on the Ground or not ------End
     }
 }

@@ -36,7 +36,11 @@ public class CameraBehavior : MonoBehaviour {
     }
 
     private void MoveToPlayer() {
-        _camera.transform.position = new Vector3(Mathf.Lerp(_camera.transform.position.x, LevelLoader2D.playerHuman.transform.position.x, _speed * Time.deltaTime), Mathf.Lerp(_camera.transform.position.y, LevelLoader2D.playerHuman.transform.position.y, _speed * Time.deltaTime), _camera.transform.position.z);
+        ChoosePlayer(LevelLoader2D.playerZombie);
         _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, 5, _speed * Time.deltaTime);
+    }
+
+    private void ChoosePlayer(GameObject _player) {
+        _camera.transform.position = new Vector3(Mathf.Lerp(_camera.transform.position.x, _player.transform.position.x, _speed * Time.deltaTime), Mathf.Lerp(_camera.transform.position.y, _player.transform.position.y, _speed * Time.deltaTime), _camera.transform.position.z);
     }
 }
