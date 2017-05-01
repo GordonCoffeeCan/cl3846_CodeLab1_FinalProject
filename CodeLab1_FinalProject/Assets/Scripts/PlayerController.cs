@@ -6,22 +6,23 @@ public class PlayerController : MonoBehaviour {
 
     public float speed = 8;
     public float jumpSpeed = 5;
-    public float aimSpeed = 30;
-    public float reticleFadeSpeed = 5;
-
-    private float _reticleTimer;
-    private float _reticleTimerRecord = 1.2f;
+    public float aimSpeed = 70;
+    public float reticleFadeSpeed = 10;
 
     private Rigidbody2D _rig;
     private Animator _anim;
-    private Transform _headPivot;
+    //private Transform _headPivot;
     private Transform _reticlePivot;
+    private Animator _reticleAnim;
     private SpriteRenderer _reticle;
     private float _reticleCounterAngle;
+    private float _rotZ;
     private Transform _spriteHolder;
 
     private float _speed;
-    private bool _directionChanged;
+    private bool _faceingRight;
+
+    private bool _characterSwitched;
 
     private string _ctrMove;
     private string _ctrAim;
@@ -34,9 +35,10 @@ public class PlayerController : MonoBehaviour {
         _anim = this.GetComponent<Animator>();
         _reticlePivot = this.transform.Find("ReticlePivot");
         _reticle = _reticlePivot.Find("Reticle").GetComponent<SpriteRenderer>();
+        _reticleAnim = _reticle.GetComponent<Animator>();
         _spriteHolder = this.transform.Find("SpriteHolder");
         _speed = speed;
-        _reticleTimer = _reticleTimerRecord;
+        _characterSwitched = false;
     }
 
     // Use this for initialization
@@ -45,99 +47,127 @@ public class PlayerController : MonoBehaviour {
             _ctrMove = "JoyHorizontal";
             _ctrAim = "JoyVertical";
             _ctrJump = "JoyJump";
-            _headPivot = this.transform.Find("Human_body/HeadPivot");
+            //_headPivot = this.transform.Find("Human_body/HeadPivot");
         } else if (this.tag == "Zombie") {
             _ctrMove = "ZomHorizontal";
             _ctrAim = "ZomVertical";
             _ctrJump = "ZomJump";
-            _headPivot = this.transform.Find("Zombie_body/HeadPivot");
+            //_headPivot = this.transform.Find("Zombie_body/HeadPivot");
         }
         _reticle.color = new Color(1, 1, 1, 0);
         _reticleCounterAngle = 0;
-        _directionChanged = false;
+        _faceingRight = true;
     }
 	
 	// Update is called once per frame
 	void Update () {
+        if (this.tag == "Human") {
+            if (GameData._isHumanTurn == true) {
+                PlayerControl();
+                if (_characterSwitched == false) {
+                    _reticleAnim.SetBool("ShowReticle", true);
+                    _characterSwitched = true;
+                }
+            } else {
+                ResetCharacterAnim();
+            }
+
+        }
+
+        if (this.tag == "Zombie") {
+            if (GameData._isHumanTurn == false) {
+                PlayerControl();
+                if (_characterSwitched == false) {
+                    _reticleAnim.SetBool("ShowReticle", true);
+                    _characterSwitched = true;
+                }
+            } else {
+                ResetCharacterAnim();
+            }
+        }
+
+    }
+
+    private void PlayerControl() {
         if (_isGround == true) {
+            //If Veriticle Axis value is greater than 0.75, rotate aim reticle;
             if (Mathf.Abs(Input.GetAxis(_ctrAim)) > 0.75f) {
+                _reticleAnim.SetBool("ShowReticle", true);
+
+                //Rotate Aim Reticle;
                 if (_spriteHolder.localScale.x > 0) {
-                    /*if (_directionChanged == true) {
-                        _reticlePivot.rotation = Quaternion.Euler(new Vector3(0, 0, _reticleCounterAngle));
-                        _directionChanged = false;
-                    }
-                    
-                    if (_reticlePivot.rotation.eulerAngles.z >= 0 && _reticlePivot.rotation.eulerAngles.z < 110) {
-                        if (_reticlePivot.rotation.eulerAngles.z > 90) {
-                            _reticlePivot.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
-                        }
-                        _reticlePivot.Rotate(new Vector3(0, 0, Input.GetAxis(_ctrAim) * Time.deltaTime * 100));
-                        _reticleCounterAngle = (90 - _reticlePivot.rotation.eulerAngles.z) * 2 + _reticlePivot.rotation.eulerAngles.z;
-                    } else if (_reticlePivot.rotation.eulerAngles.z >= 260 && _reticlePivot.rotation.eulerAngles.z < 360) {
-                        if (_reticlePivot.rotation.eulerAngles.z < 270) {
-                            _reticlePivot.rotation = Quaternion.Euler(new Vector3(0, 0, 270));
-                        }
-                        _reticlePivot.Rotate(new Vector3(0, 0, Input.GetAxis(_ctrAim) * Time.deltaTime * 100));
-                        _reticleCounterAngle = _reticlePivot.rotation.eulerAngles.z - (_reticlePivot.rotation.eulerAngles.z - 270) * 2;
-                    }*/
-
-                    Debug.Log(Mathf.Clamp(_reticlePivot.rotation.eulerAngles.z, 10, 50));
                     _reticlePivot.Rotate(new Vector3(0, 0, Input.GetAxis(_ctrAim) * Time.deltaTime * 100));
-                } else if(_spriteHolder.localScale.x < 0) {
-                    /*if (_directionChanged == false) {
-                        _reticlePivot.rotation = Quaternion.Euler(new Vector3(0, 0, _reticleCounterAngle));
-                        _directionChanged = true;
+
+                    _rotZ = _reticlePivot.eulerAngles.z;
+
+                    if (_rotZ >= 0 && _rotZ <= 270) {
+                        _reticlePivot.rotation = Quaternion.Euler(0, 0, Mathf.Clamp(_rotZ, 0, 80));
+                        _reticleCounterAngle = (90 - _rotZ) * 2;
+                    } else if (_rotZ >= 270 && _rotZ < 360) {
+                        _reticlePivot.rotation = Quaternion.Euler(0, 0, Mathf.Clamp(_rotZ, 280, 360));
+                        _reticleCounterAngle = (_rotZ - 270) * 2;
                     }
-                    if (_reticlePivot.rotation.eulerAngles.z > 87 && _reticlePivot.rotation.eulerAngles.z < 273) {
-                        if (_reticlePivot.rotation.eulerAngles.z < 90) {
-                            _reticlePivot.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
-                            _reticleCounterAngle = _reticlePivot.rotation.eulerAngles.z - (_reticlePivot.rotation.eulerAngles.z - 90) * 2;
-                        } else if (_reticlePivot.rotation.eulerAngles.z > 273) {
-                            Debug.Log("Yes");
-                            _reticlePivot.rotation = Quaternion.Euler(new Vector3(0, 0, 270));
-                            _reticleCounterAngle = (270 - _reticlePivot.rotation.eulerAngles.z) * 2 + _reticlePivot.rotation.eulerAngles.z;
+
+                } else if (_spriteHolder.localScale.x < 0) {
+                    _reticlePivot.Rotate(new Vector3(0, 0, -Input.GetAxis(_ctrAim) * Time.deltaTime * 100));
+
+                    _rotZ = _reticlePivot.eulerAngles.z;
+
+                    if (_rotZ >= 90 && _rotZ <= 270) {
+                        _reticlePivot.rotation = Quaternion.Euler(0, 0, Mathf.Clamp(_rotZ, 100, 260));
+                        if (_rotZ <= 180) {
+                            _reticleCounterAngle = (_rotZ - 90) * 2;
+                        } else {
+                            _reticleCounterAngle = (270 - _rotZ) * 2;
                         }
-
-                        _reticlePivot.Rotate(new Vector3(0, 0, -Input.GetAxis(_ctrAim) * Time.deltaTime * 100));
-                    }*/
-
-                    Debug.Log(_reticlePivot.rotation.eulerAngles.z);
-                }
-
-
-                /*if (_headPivot.rotation.eulerAngles.z >= 0 && _headPivot.rotation.eulerAngles.z < 90) {
-                    if (_headPivot.rotation.eulerAngles.z > 30) {
-                        _headPivot.rotation = Quaternion.Euler(new Vector3(0, 0, 30));
-                    }
-                } else if (_headPivot.rotation.eulerAngles.z >= 270 && _headPivot.rotation.eulerAngles.z < 360) {
-                    if (_headPivot.rotation.eulerAngles.z < 315) {
-                        _headPivot.rotation = Quaternion.Euler(new Vector3(0, 0, -45));
                     }
                 }
-                _headPivot.Rotate(new Vector3(0, 0, Input.GetAxis(_ctrAim) * Time.deltaTime * 100));*/
 
+                //Rotate Aim Reticle; ------End
 
-                _reticleTimer = _reticleTimerRecord;
-                _reticle.color = new Color(1, 1, 1, Mathf.Lerp(_reticle.color.a, 1, reticleFadeSpeed * Time.deltaTime));
-                
                 _anim.SetFloat("Speed", 0);
                 speed = 0;
-            } else{
+            } else {
+                //Else if Veriticle Axis value is lesser than 0.75, do not rotate aim reticle;
+
+                //Calculating Reticle Pivot counter angle;
+                if (_rotZ >= 0 && _rotZ <= 270) {
+                    _reticleCounterAngle = (90 - _rotZ) * 2;
+                } else if (_rotZ >= 270 && _rotZ < 360) {
+                    _reticleCounterAngle = (_rotZ - 270) * 2;
+                }
+                if (_rotZ >= 90 && _rotZ <= 270) {
+                    if (_rotZ <= 180) {
+                        _reticleCounterAngle = (_rotZ - 90) * 2;
+                    } else {
+                        _reticleCounterAngle = (270 - _rotZ) * 2;
+                    }
+                }
+                //Calculating Reticle Pivot counter angle ------End
+
+                //Horizontal Axis value greater than 0, move the player rightwards, lesser than 0, move the player leftwards;
                 if (Input.GetAxis(_ctrMove) > 0) {
                     _anim.SetFloat("Speed", 1);
                     _anim.SetLayerWeight(1, 0);
+
+                    //Detect the previous facing direction whether right or left; 
+                    FacingRight();
+
                 } else if (Input.GetAxis(_ctrMove) < 0) {
                     _anim.SetFloat("Speed", 1);
                     _anim.SetLayerWeight(1, 1);
+
+                    //Detect the previous facing direction whether right or left;
+                    FacingLeft();
                 } else {
+                    _reticleAnim.SetBool("ShowReticle", true);
                     _anim.SetFloat("Speed", 0);
                 }
                 speed = _speed;
 
-                _reticleTimer -= Time.deltaTime;
-                if(_reticleTimer <= 0 || Mathf.Abs(Input.GetAxis(_ctrMove)) > 0) {
-                    _reticleTimer = 0;
-                    _reticle.color = new Color(1, 1, 1, Mathf.Lerp(_reticle.color.a, 0, reticleFadeSpeed * Time.deltaTime));
+                if (Mathf.Abs(Input.GetAxis(_ctrMove)) > 0) {
+                    //_reticle.color = new Color(1, 1, 1, Mathf.Lerp(_reticle.color.a, 0, reticleFadeSpeed * Time.deltaTime));
+                    _reticleAnim.SetBool("ShowReticle", false);
                 }
             }
 
@@ -145,12 +175,22 @@ public class PlayerController : MonoBehaviour {
                 _rig.AddForce(new Vector2(0, jumpSpeed), ForceMode2D.Impulse);
             }
         } else {
+
+            //_reticle.color = new Color(1, 1, 1, Mathf.Lerp(_reticle.color.a, 0, reticleFadeSpeed * Time.deltaTime));
+            _reticleAnim.SetBool("ShowReticle", false);
             if (Input.GetAxis(_ctrMove) > 0) {
                 _anim.SetFloat("Speed", 1);
                 _anim.SetLayerWeight(1, 0);
+
+                //Detect the previous facing direction whether right or left;
+                FacingRight();
+
             } else if (Input.GetAxis(_ctrMove) < 0) {
                 _anim.SetFloat("Speed", 1);
                 _anim.SetLayerWeight(1, 1);
+
+                //Detect the previous facing direction whether right or left;
+                FacingLeft();
             } else {
                 _anim.SetFloat("Speed", 0);
             }
@@ -178,5 +218,35 @@ public class PlayerController : MonoBehaviour {
             _isGround = false;
         }
         //Get a raycast2D to detect is on the Ground or not ------End
+    }
+
+    private void ResetCharacterAnim() {
+        _reticleAnim.SetBool("ShowReticle", false);
+        _anim.SetFloat("Speed", 0);
+        _rig.velocity = new Vector3(0, _rig.velocity.y, 0);
+        _anim.SetBool("OnGround", _isGround);
+        _characterSwitched = false;
+    }
+
+    private void FacingRight() {
+        if (_faceingRight == false) {
+            if (_reticlePivot.eulerAngles.z <= 180) {
+                _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z - _reticleCounterAngle);
+            } else {
+                _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z + _reticleCounterAngle);
+            }
+            _faceingRight = true;
+        }
+    }
+
+    private void FacingLeft() {
+        if (_faceingRight == true) {
+            if (_reticlePivot.eulerAngles.z <= 90) {
+                _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z + _reticleCounterAngle);
+            } else {
+                _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z - _reticleCounterAngle);
+            }
+            _faceingRight = false;
+        }
     }
 }

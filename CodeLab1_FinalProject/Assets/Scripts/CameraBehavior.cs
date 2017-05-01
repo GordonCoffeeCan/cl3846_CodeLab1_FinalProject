@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraBehavior : MonoBehaviour {
-
     private Camera _camera;
-
     private float _speed = 5;
-
     private bool _levelShowed = false;
 
     private void Awake() {
@@ -16,8 +13,8 @@ public class CameraBehavior : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
-	}
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -26,7 +23,7 @@ public class CameraBehavior : MonoBehaviour {
         } else {
             Invoke("MoveToPlayer", 3);
         }
-        
+
         
     }
 
@@ -36,7 +33,12 @@ public class CameraBehavior : MonoBehaviour {
     }
 
     private void MoveToPlayer() {
-        ChoosePlayer(LevelLoader2D.playerZombie);
+        if (GameData._isHumanTurn == true) {
+            ChoosePlayer(LevelLoader2D.playerHuman);
+        } else {
+            ChoosePlayer(LevelLoader2D.playerZombie);
+        }
+        
         _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, 5, _speed * Time.deltaTime);
     }
 
