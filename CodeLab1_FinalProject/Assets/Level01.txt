@@ -9,5 +9,5 @@ x-----x----------------x----------x
 x----xx---------------zxx---------x
 x---xxx-------xx--------xx--------x
 x--xx-----p-xxxxxxx-----xxx-------x
-x-c-xxxxx----x---------xxxxx---c--x
+x-c-xxxxx--x-x---------xxxxx---c--x
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

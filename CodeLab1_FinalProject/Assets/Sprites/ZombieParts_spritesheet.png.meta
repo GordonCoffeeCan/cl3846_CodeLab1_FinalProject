@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 4ba4d137b30b6bf4ca886d196a2c72a0
-timeCreated: 1493419804
+timeCreated: 1493756546
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -246,7 +246,7 @@ TextureImporter:
         serializedVersion: 2
         x: 23
         y: 4
-        width: 16
+        width: 17
         height: 29
       alignment: 9
       pivot: {x: 0.5370456, y: 0.90110373}
