@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour {
     private float _rotZ;
     private Transform _spriteHolder;
 
+    private float _flipTimmer = 0.68f;
+
     private float _speed;
     private bool _faceingRight;
 
@@ -65,7 +67,7 @@ public class PlayerController : MonoBehaviour {
             if (GameData._isHumanTurn == true) {
                 PlayerControl();
                 if (_characterSwitched == false) {
-                    _reticleAnim.SetBool("ShowReticle", true);
+                    _reticleAnim.SetBool("ShowReticle", false);
                     _characterSwitched = true;
                 }
             } else {
@@ -78,7 +80,7 @@ public class PlayerController : MonoBehaviour {
             if (GameData._isHumanTurn == false) {
                 PlayerControl();
                 if (_characterSwitched == false) {
-                    _reticleAnim.SetBool("ShowReticle", true);
+                    _reticleAnim.SetBool("ShowReticle", false);
                     _characterSwitched = true;
                 }
             } else {
@@ -150,7 +152,7 @@ public class PlayerController : MonoBehaviour {
                     _anim.SetFloat("Speed", 1);
                     _anim.SetLayerWeight(1, 0);
 
-                    //Detect the previous facing direction whether right or left; 
+                    //Detect the previous facing direction whether right or left;
                     FacingRight();
 
                 } else if (Input.GetAxis(_ctrMove) < 0) {
@@ -160,7 +162,6 @@ public class PlayerController : MonoBehaviour {
                     //Detect the previous facing direction whether right or left;
                     FacingLeft();
                 } else {
-                    _reticleAnim.SetBool("ShowReticle", true);
                     _anim.SetFloat("Speed", 0);
                 }
                 speed = _speed;
@@ -230,23 +231,33 @@ public class PlayerController : MonoBehaviour {
 
     private void FacingRight() {
         if (_faceingRight == false) {
-            if (_reticlePivot.eulerAngles.z <= 180) {
-                _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z - _reticleCounterAngle);
-            } else {
-                _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z + _reticleCounterAngle);
-            }
+            _reticleAnim.SetBool("ShowReticle", false);
+            Invoke("ReticleFlipToRight", 0.5f);
             _faceingRight = true;
         }
     }
 
     private void FacingLeft() {
         if (_faceingRight == true) {
-            if (_reticlePivot.eulerAngles.z <= 90) {
-                _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z + _reticleCounterAngle);
-            } else {
-                _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z - _reticleCounterAngle);
-            }
+            _reticleAnim.SetBool("ShowReticle", false);
+            Invoke("ReticleFlipToLeft", 0.5f);
             _faceingRight = false;
+        }
+    }
+
+    private void ReticleFlipToRight() {
+        if (_reticlePivot.eulerAngles.z <= 180) {
+            _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z - _reticleCounterAngle);
+        } else {
+            _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z + _reticleCounterAngle);
+        }
+    }
+
+    private void ReticleFlipToLeft() {
+        if (_reticlePivot.eulerAngles.z <= 90) {
+            _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z + _reticleCounterAngle);
+        } else {
+            _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z - _reticleCounterAngle);
         }
     }
 }
