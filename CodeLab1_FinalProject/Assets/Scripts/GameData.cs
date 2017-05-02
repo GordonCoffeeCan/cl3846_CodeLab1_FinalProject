@@ -23,7 +23,5 @@ public class GameData : MonoBehaviour {
         }
 
         _isHumanTurn = isHumanTrun;
-
-        Debug.Log(_isHumanTurn);
     }
 }

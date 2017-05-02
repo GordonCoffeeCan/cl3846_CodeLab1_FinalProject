@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour {
     public float aimSpeed = 70;
     public float reticleFadeSpeed = 10;
 
+    public static bool isGround;
+
     private Rigidbody2D _rig;
     private Animator _anim;
     //private Transform _headPivot;
@@ -202,6 +204,8 @@ public class PlayerController : MonoBehaviour {
         }
         _rig.velocity = new Vector2(Input.GetAxis(_ctrMove) * speed * Time.deltaTime * 10, _rig.velocity.y);
         _anim.SetBool("OnGround", _isGround);
+
+        isGround = _isGround;
     }
 
     private void FixedUpdate() {
