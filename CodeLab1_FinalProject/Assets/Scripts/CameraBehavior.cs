@@ -22,6 +22,7 @@ public class CameraBehavior : MonoBehaviour {
     void Start () {
         _zoomCam = 0;
         playerShowed = false;
+        _levelShowed = false;
     }
 	
 	// Update is called once per frame
@@ -37,6 +38,7 @@ public class CameraBehavior : MonoBehaviour {
     }
 
     private void ShowLevel() {
+        _camera.transform.position = new Vector3(0, 0, _camera.transform.position.z);
         _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, _maxCamOrthographicSize, _speed * Time.deltaTime);
         _levelShowed = true;
     }

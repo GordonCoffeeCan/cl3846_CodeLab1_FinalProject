@@ -24,6 +24,8 @@ public class LevelLoader2D : MonoBehaviour {
         _levelHolder = new GameObject("Level Holder");
         _filePath = Application.dataPath + "/" + _fileName;
         _streamReader = new StreamReader(_filePath);
+        _offSetX = 0;
+        _offSetY = 0;
         SetLevel();
     }
 	
