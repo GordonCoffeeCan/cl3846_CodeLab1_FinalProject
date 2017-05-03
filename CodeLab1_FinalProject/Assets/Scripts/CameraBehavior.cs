@@ -33,7 +33,7 @@ public class CameraBehavior : MonoBehaviour {
     }
 
     private void MoveToPlayer() {
-        if (GameData._isHumanTurn == true) {
+        if (GameData.isHumanTurn == true) {
             ChoosePlayer(LevelLoader2D.playerHuman);
         } else {
             ChoosePlayer(LevelLoader2D.playerZombie);

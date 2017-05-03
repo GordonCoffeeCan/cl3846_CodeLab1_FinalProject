@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameData : MonoBehaviour {
-    public bool isHumanTrun = true;
+    public static bool isHumanTurn = false;
 
-    public static bool _isHumanTurn = true;
+    public static bool isTurnOnGoing = true;
 
 
 	// Use this for initialization
@@ -16,12 +16,5 @@ public class GameData : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetKeyUp(KeyCode.Alpha1)) {
-            isHumanTrun = true;
-        }else if (Input.GetKeyUp(KeyCode.Alpha2)) {
-            isHumanTrun = false;
-        }
-
-        _isHumanTurn = isHumanTrun;
     }
 }

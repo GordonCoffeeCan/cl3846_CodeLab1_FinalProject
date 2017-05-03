@@ -10,16 +10,22 @@ public class PlayerController : MonoBehaviour {
     public float reticleFadeSpeed = 10;
 
     public static bool isGround;
+    public static Transform reticlePivot;
+    public static Transform spriteHolder;
+    public static float moveAxis = 0;
 
     private Rigidbody2D _rig;
     private Animator _anim;
     //private Transform _headPivot;
+
     private Transform _reticlePivot;
+    private Transform _spriteHolder;
+
     private Animator _reticleAnim;
     private SpriteRenderer _reticle;
     private float _reticleCounterAngle;
     private float _rotZ;
-    private Transform _spriteHolder;
+
 
     private float _flipTimmer = 0.68f;
 
@@ -58,15 +64,16 @@ public class PlayerController : MonoBehaviour {
             _ctrJump = "ZomJump";
             //_headPivot = this.transform.Find("Zombie_body/HeadPivot");
         }
-        _reticle.color = new Color(1, 1, 1, 0);
         _reticleCounterAngle = 0;
         _faceingRight = true;
+        reticlePivot = _reticlePivot;
     }
 	
 	// Update is called once per frame
 	void Update () {
+        
         if (this.tag == "Human") {
-            if (GameData._isHumanTurn == true) {
+            if (GameData.isHumanTurn == true) {
                 PlayerControl();
                 if (_characterSwitched == false) {
                     _reticleAnim.SetBool("ShowReticle", false);
@@ -79,7 +86,7 @@ public class PlayerController : MonoBehaviour {
         }
 
         if (this.tag == "Zombie") {
-            if (GameData._isHumanTurn == false) {
+            if (GameData.isHumanTurn == false) {
                 PlayerControl();
                 if (_characterSwitched == false) {
                     _reticleAnim.SetBool("ShowReticle", false);
@@ -89,11 +96,12 @@ public class PlayerController : MonoBehaviour {
                 ResetCharacterAnim();
             }
         }
-
+        spriteHolder = _spriteHolder;
     }
 
     private void PlayerControl() {
         if (_isGround == true) {
+            
             //If Veriticle Axis value is greater than 0.75, rotate aim reticle;
             if (Mathf.Abs(Input.GetAxis(_ctrAim)) > 0.75f) {
                 _reticleAnim.SetBool("ShowReticle", true);
@@ -105,11 +113,13 @@ public class PlayerController : MonoBehaviour {
                     _rotZ = _reticlePivot.eulerAngles.z;
 
                     if (_rotZ >= 0 && _rotZ <= 270) {
+                        
                         _reticlePivot.rotation = Quaternion.Euler(0, 0, Mathf.Clamp(_rotZ, 0, 80));
                         _reticleCounterAngle = (90 - _rotZ) * 2;
                     } else if (_rotZ >= 270 && _rotZ < 360) {
                         _reticlePivot.rotation = Quaternion.Euler(0, 0, Mathf.Clamp(_rotZ, 280, 360));
                         _reticleCounterAngle = (_rotZ - 270) * 2;
+                        
                     }
 
                 } else if (_spriteHolder.localScale.x < 0) {
@@ -126,7 +136,6 @@ public class PlayerController : MonoBehaviour {
                         }
                     }
                 }
-
                 //Rotate Aim Reticle; ------End
 
                 _anim.SetFloat("Speed", 0);
@@ -206,6 +215,9 @@ public class PlayerController : MonoBehaviour {
         _anim.SetBool("OnGround", _isGround);
 
         isGround = _isGround;
+        reticlePivot = _reticlePivot;
+
+        moveAxis = Input.GetAxis(_ctrMove);
     }
 
     private void FixedUpdate() {
@@ -231,37 +243,30 @@ public class PlayerController : MonoBehaviour {
         _rig.velocity = new Vector3(0, _rig.velocity.y, 0);
         _anim.SetBool("OnGround", _isGround);
         _characterSwitched = false;
+        reticlePivot = _reticlePivot;
     }
 
     private void FacingRight() {
         if (_faceingRight == false) {
-            _reticleAnim.SetBool("ShowReticle", false);
-            Invoke("ReticleFlipToRight", 0.5f);
+            if (_reticlePivot.eulerAngles.z <= 180) {
+                _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z - _reticleCounterAngle);
+            } else {
+                _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z + _reticleCounterAngle);
+            }
+            reticlePivot = _reticlePivot;
             _faceingRight = true;
         }
     }
 
     private void FacingLeft() {
         if (_faceingRight == true) {
-            _reticleAnim.SetBool("ShowReticle", false);
-            Invoke("ReticleFlipToLeft", 0.5f);
+            if (_reticlePivot.eulerAngles.z <= 90) {
+                _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z + _reticleCounterAngle);
+            } else {
+                _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z - _reticleCounterAngle);
+            }
+            reticlePivot = _reticlePivot;
             _faceingRight = false;
-        }
-    }
-
-    private void ReticleFlipToRight() {
-        if (_reticlePivot.eulerAngles.z <= 180) {
-            _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z - _reticleCounterAngle);
-        } else {
-            _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z + _reticleCounterAngle);
-        }
-    }
-
-    private void ReticleFlipToLeft() {
-        if (_reticlePivot.eulerAngles.z <= 90) {
-            _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z + _reticleCounterAngle);
-        } else {
-            _reticlePivot.rotation = Quaternion.Euler(0, 0, _reticlePivot.eulerAngles.z - _reticleCounterAngle);
         }
     }
 }

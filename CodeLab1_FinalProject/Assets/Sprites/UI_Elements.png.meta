@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 5d741143d19bf52428ba8cbcec89a417
-timeCreated: 1493745025
+timeCreated: 1493759641
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -12,6 +12,14 @@ TextureImporter:
     21300010: UI_Weapon_Stone
     21300012: UI_VS
     21300014: UI_Zombie
+    21300016: UI_HPBG
+    21300018: UI_HPFrame
+    21300020: UI_HPBar
+    21300022: UI_Human
+    21300024: UI_Weapon_Skull
+    21300026: UI_Weapon_Stone
+    21300028: UI_VS
+    21300030: UI_Zombie
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -177,7 +185,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 8
-        y: 151
+        y: 145
         width: 117
         height: 125
       alignment: 0
@@ -189,8 +197,8 @@ TextureImporter:
       name: UI_Weapon_Skull
       rect:
         serializedVersion: 2
-        x: 133
-        y: 192
+        x: 139
+        y: 186
         width: 79
         height: 85
       alignment: 0
@@ -202,8 +210,8 @@ TextureImporter:
       name: UI_Weapon_Stone
       rect:
         serializedVersion: 2
-        x: 216
-        y: 200
+        x: 228
+        y: 194
         width: 88
         height: 77
       alignment: 0
@@ -215,10 +223,10 @@ TextureImporter:
       name: UI_VS
       rect:
         serializedVersion: 2
-        x: 308
-        y: 177
-        width: 122
-        height: 101
+        x: 324
+        y: 169
+        width: 126
+        height: 102
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -229,9 +237,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 6
-        y: 21
+        y: 8
         width: 121
-        height: 125
+        height: 127
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
