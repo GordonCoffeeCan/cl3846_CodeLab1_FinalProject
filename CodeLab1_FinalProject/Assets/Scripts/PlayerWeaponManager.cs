@@ -74,12 +74,14 @@ public class PlayerWeaponManager : MonoBehaviour {
 
                     if (_currentPower == _fullPower) {
                         _anim.SetTrigger("Throw");
+                        ThrowWeapon();
                         _isAbleToFire = false;
                     }
                 }
 
                 if ((Input.GetButtonUp(_throw)) && _isAbleToFire == true) {
                     _anim.SetTrigger("Throw");
+                    ThrowWeapon();
                     _isAbleToFire = false;
                 }
             }
@@ -96,7 +98,7 @@ public class PlayerWeaponManager : MonoBehaviour {
         }
     }
 
-    private void ThrowWeaponRight() {
+    /*private void ThrowWeaponRight() {
         if (PlayerController.spriteHolder.localScale.x > 0) {
             ThrowWeapon();
         }
@@ -106,7 +108,7 @@ public class PlayerWeaponManager : MonoBehaviour {
         if (PlayerController.spriteHolder.localScale.x < 0) {
             ThrowWeapon();
         }
-    }
+    }*/
 
     private void ThrowWeapon() {
         if(this.tag == "Zombie") {

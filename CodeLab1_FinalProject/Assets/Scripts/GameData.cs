@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameData : MonoBehaviour {
-    public static bool isHumanTurn = false;
+    public static bool isHumanTurn = true;
 
     public static bool isTurnOnGoing = true;
 

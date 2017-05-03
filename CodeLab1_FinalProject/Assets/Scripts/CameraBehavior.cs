@@ -6,6 +6,7 @@ public class CameraBehavior : MonoBehaviour {
     private Camera _camera;
     private float _speed = 5;
     private bool _levelShowed = false;
+    private bool _playerShowed = false;
 
     private void Awake() {
         _camera = Camera.main;
@@ -24,7 +25,19 @@ public class CameraBehavior : MonoBehaviour {
             Invoke("MoveToPlayer", 3);
         }
 
-        
+        if(_playerShowed == true) {
+            if (GameData.isHumanTurn == true) {
+                _camera.orthographicSize += Input.GetAxis("JoyZoom");
+            } else {
+                _camera.orthographicSize += Input.GetAxis("ZomZoom");
+            }
+        }
+
+        Debug.Log(_playerShowed);
+
+        if (_camera.orthographicSize < 5) {
+            _playerShowed = true;
+        }
     }
 
     private void ShowLevel() {
@@ -38,8 +51,10 @@ public class CameraBehavior : MonoBehaviour {
         } else {
             ChoosePlayer(LevelLoader2D.playerZombie);
         }
-        
-        _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, 5, _speed * Time.deltaTime);
+
+        if (_playerShowed == false) {
+            _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, 4.8f, _speed * Time.deltaTime);
+        }
     }
 
     private void ChoosePlayer(GameObject _player) {

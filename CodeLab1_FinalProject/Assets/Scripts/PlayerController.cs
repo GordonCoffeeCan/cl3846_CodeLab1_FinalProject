@@ -243,7 +243,6 @@ public class PlayerController : MonoBehaviour {
         _rig.velocity = new Vector3(0, _rig.velocity.y, 0);
         _anim.SetBool("OnGround", _isGround);
         _characterSwitched = false;
-        reticlePivot = _reticlePivot;
     }
 
     private void FacingRight() {
