@@ -111,10 +111,6 @@ public class PlayerWeaponManager : MonoBehaviour {
     }*/
 
     private void ThrowWeapon() {
-        if(this.tag == "Zombie") {
-            Debug.Log("Zombie Throw");
-        }
-        
         _throwableObject = Instantiate(Resources.Load("Prefabs/" + _throwWeaponName), _throwWeaponPoint.position, Quaternion.identity) as GameObject;
         Physics2D.IgnoreCollision(this.GetComponent<Collider2D>(), _throwableObject.GetComponent<Collider2D>());
         _throwableObject.GetComponent<Rigidbody2D>().AddForceAtPosition(new Vector2(_throwDirection.x, _throwDirection.y) * _currentPower, _throwWeaponPoint.position, ForceMode2D.Impulse);
@@ -126,10 +122,12 @@ public class PlayerWeaponManager : MonoBehaviour {
         if(GameData.isHumanTurn == true) {
             GameData.isHumanTurn = false;
             GameData.isTurnOnGoing = true;
+            CameraBehavior.playerShowed = false;
             _isAbleToFire = true;
         } else {
             GameData.isHumanTurn = true;
             GameData.isTurnOnGoing = true;
+            CameraBehavior.playerShowed = false;
             _isAbleToFire = true;
         }
     }

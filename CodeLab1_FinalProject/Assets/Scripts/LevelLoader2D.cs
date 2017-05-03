@@ -41,10 +41,10 @@ public class LevelLoader2D : MonoBehaviour {
             for (int _posX = 0; _posX < _docLine.Length; _posX++) {
                 switch (_docLine[_posX]) {
                     case 'x':
-                        SetObject("TestBox", _posX);
+                        SetObject("Wall", _posX);
                         break;
                     case 'c':
-                        SetObject("StoneCollum", _posX);
+                        SetObject("Spike", _posX);
                         break;
                     case 'p':
                         SetObject("Human", _posX);

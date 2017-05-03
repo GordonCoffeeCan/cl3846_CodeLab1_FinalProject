@@ -26,9 +26,6 @@ public class PlayerController : MonoBehaviour {
     private float _reticleCounterAngle;
     private float _rotZ;
 
-
-    private float _flipTimmer = 0.68f;
-
     private float _speed;
     private bool _faceingRight;
 
