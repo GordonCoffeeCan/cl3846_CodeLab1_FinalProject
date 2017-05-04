@@ -15,22 +15,22 @@ Platform assembly: D:\Documents\NYU_CodeLab_1_Spring_2017\cl3846_CodeLab1_FinalP
 Loading D:\Documents\NYU_CodeLab_1_Spring_2017\cl3846_CodeLab1_FinalProject\CodeLab1_FinalProject\TestBuild\Test_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: D:\Documents\NYU_CodeLab_1_Spring_2017\cl3846_CodeLab1_FinalProject\CodeLab1_FinalProject\TestBuild\Test_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading D:\Documents\NYU_CodeLab_1_Spring_2017\cl3846_CodeLab1_FinalProject\CodeLab1_FinalProject\TestBuild\Test_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.017 seconds
+- Completed reload, in  0.019 seconds
 Platform assembly: D:\Documents\NYU_CodeLab_1_Spring_2017\cl3846_CodeLab1_FinalProject\CodeLab1_FinalProject\TestBuild\Test_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\Documents\NYU_CodeLab_1_Spring_2017\cl3846_CodeLab1_FinalProject\CodeLab1_FinalProject\TestBuild\Test_Data\Managed\System.dll (this message is harmless)
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 1.807011 ms
+UnloadTime: 1.705086 ms
 Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 3.813529 ms
+UnloadTime: 4.118518 ms
 
 Unloading 114 unused Assets to reduce memory usage. Loaded Objects now: 467.
-Total: 0.329876 ms (FindLiveObjects: 0.060444 ms CreateObjectMapping: 0.011851 ms MarkObjects: 0.203061 ms  DeleteObjects: 0.054123 ms)
+Total: 0.254024 ms (FindLiveObjects: 0.028444 ms CreateObjectMapping: 0.011456 ms MarkObjects: 0.179358 ms  DeleteObjects: 0.034370 ms)
 
 Setting up 4 worker threads for Enlighten.
-  Thread -> id: e6d0 -> priority: 1 
-  Thread -> id: e6f0 -> priority: 1 
-  Thread -> id: c6b8 -> priority: 1 
-  Thread -> id: e14c -> priority: 1 
+  Thread -> id: 1510 -> priority: 1 
+  Thread -> id: c9c -> priority: 1 
+  Thread -> id: 283c -> priority: 1 
+  Thread -> id: 378c -> priority: 1 
