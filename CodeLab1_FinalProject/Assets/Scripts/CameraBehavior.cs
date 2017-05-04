@@ -6,13 +6,28 @@ public class CameraBehavior : MonoBehaviour {
 
     public static bool playerShowed;
 
+    private GameObject _currentPlayer;
+
     private Camera _camera;
     private float _speed = 5;
+    private float _camZoomSpeed = 30;
     private bool _levelShowed = false;
 
     private float _minCamOrthographicSize = 5;
     private float _maxCamOrthographicSize = 0;
     private float _zoomCam;
+
+    private string _zoomCtrName;
+
+    private enum CameraState {
+        Null,
+        FocusingOnLevel,
+        FocusingOnPlayer,
+        FocusingOnObject,
+        InControl
+    }
+
+    private CameraState _currentCameraState;
 
     private void Awake() {
         _camera = Camera.main;
@@ -23,72 +38,76 @@ public class CameraBehavior : MonoBehaviour {
         _zoomCam = 0;
         playerShowed = false;
         _levelShowed = false;
+
+        _currentCameraState = CameraState.Null;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
+        if (GameData.isHumanTurn == true) {
+            _currentPlayer = LevelLoader2D.playerHuman;
+            _zoomCtrName = "JoyZoom";
+        } else {
+            _currentPlayer = LevelLoader2D.playerZombie;
+            _zoomCtrName = "ZomZoom";
+        }
 
         if (_levelShowed == false) {
-            Invoke("ShowLevel", 1); // Show Level
+            Invoke("ShowLevel", 0.8f); // Show Level
         } else if(_levelShowed == true) {
-            Invoke("MoveToPlayer", 3); //Level showed, now show player;
+            Invoke("CameraInGame", 2); //Level showed, now focus on Game;
         }
 
         _maxCamOrthographicSize = LevelLoader2D._offSetX / 4;
+
+        switch (_currentCameraState) {
+            case CameraState.FocusingOnLevel:
+                FocusCamera(Vector3.zero, _maxCamOrthographicSize);
+                break;
+            case CameraState.FocusingOnPlayer:
+                FocusCamera(_currentPlayer.transform.position, _minCamOrthographicSize - 0.2f);
+                break;
+            case CameraState.FocusingOnObject:
+                break;
+            case CameraState.InControl:
+                FocusCamera(_currentPlayer.transform.position, ZoomCamera(_zoomCtrName));
+                break;
+            default:
+                break;
+        }
     }
 
     private void ShowLevel() {
-        _camera.transform.position = new Vector3(0, 0, _camera.transform.position.z);
-        _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, _maxCamOrthographicSize, _speed * Time.deltaTime);
+        _currentCameraState = CameraState.FocusingOnLevel;
         _levelShowed = true;
     }
 
-    private void MoveToPlayer() {
-        if (GameData.isHumanTurn == true) {
-            ChoosePlayer(LevelLoader2D.playerHuman);
-        } else {
-            ChoosePlayer(LevelLoader2D.playerZombie);
-        }
+    private void CameraInGame() {
+        _currentCameraState = CameraState.FocusingOnPlayer;
 
         if (playerShowed == false) {
-            _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, _minCamOrthographicSize - 0.2f, _speed * Time.deltaTime);
             if (_camera.orthographicSize < _minCamOrthographicSize) {
                 playerShowed = true;
             }
         }
 
         if (playerShowed == true) {
-            //Choose Zoom Controll
-            if (GameData.isHumanTurn == true) {
-                ZoomCamera("JoyZoom");
-                MoveToZeroAndPlayer(LevelLoader2D.playerHuman);
-            } else {
-                ZoomCamera("ZomZoom");
-                MoveToZeroAndPlayer(LevelLoader2D.playerZombie);
-            }
-            //Choose Zoom Controll --- End
+            _currentCameraState = CameraState.InControl;
         }
 
         _zoomCam = _camera.orthographicSize;
     }
 
-    private void ChoosePlayer(GameObject _player) {
-        _camera.transform.position = new Vector3(Mathf.Lerp(_camera.transform.position.x, _player.transform.position.x, _speed * Time.deltaTime), Mathf.Lerp(_camera.transform.position.y, _player.transform.position.y, _speed * Time.deltaTime), _camera.transform.position.z);
-    }
-
-    private void MoveToZeroAndPlayer(GameObject _gameObject) {
-        if (_zoomCam > (_maxCamOrthographicSize - 0.5f)) {
-            _camera.transform.position = new Vector3(Mathf.Lerp(_camera.transform.position.x, 0, _speed * Time.deltaTime), Mathf.Lerp(_camera.transform.position.y, 0, _speed * Time.deltaTime), _camera.transform.position.z);
-        } else {
-            ChoosePlayer(_gameObject);
-        }
-    }
-
-    private void ZoomCamera(string _axisName) {
+    private float ZoomCamera(string _axisName) {
         if (Mathf.Abs(Input.GetAxis(_axisName)) > 0.3f){
-            _zoomCam = Mathf.Lerp(_zoomCam, _zoomCam += Input.GetAxis(_axisName), _speed * Time.deltaTime);
+            _zoomCam = Mathf.Lerp(_zoomCam, _zoomCam += Input.GetAxis(_axisName), _camZoomSpeed * Time.deltaTime);
             _zoomCam = Mathf.Clamp(_zoomCam, _minCamOrthographicSize, _maxCamOrthographicSize);
-            _camera.orthographicSize = _zoomCam;
         }
+        return _zoomCam;
+    }
+
+    private void FocusCamera(Vector3 _position, float _targetCamSize) {
+        _camera.transform.position = new Vector3(Mathf.Lerp(_camera.transform.position.x, _position.x, _speed * Time.deltaTime), Mathf.Lerp(_camera.transform.position.y, _position.y, _speed * Time.deltaTime), _camera.transform.position.z);
+        _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, _targetCamSize, _speed * Time.deltaTime);
     }
 }
